@@ -1,0 +1,14 @@
+Graph
+DG
+A B C D E F G
+A B
+A C
+B D
+B E
+C D
+C F
+D G
+E D
+E G
+F G
+D B
