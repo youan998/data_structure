@@ -11,10 +11,14 @@
             "id": "d6fb8475a97167dd",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "homework/test3.md",
+                "mode": "preview",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "新标签页"
+              "title": "test3"
             }
           }
         ]
@@ -181,6 +185,8 @@
   },
   "active": "d6fb8475a97167dd",
   "lastOpenFiles": [
+    "homework/test1.md",
+    "expt/报告/exp1--顺序表实验.pdf",
     "homework/数据结构课程设计报告模板-2026.pdf",
     "homework/test3.md",
     "homework/数据结构课程设计报告模板-2026~E87FC.tmp",
@@ -191,7 +197,6 @@
     "homework/数据结构课程设计报告模板-2026~A651A.tmp",
     "homework/数据结构课程设计报告模板-2026~9B389.tmp",
     "homework/test2.md",
-    "homework/test1.md",
     "homework/~$结构课程设计报告模板-2026.docx",
     "text 1.canvas"
   ]

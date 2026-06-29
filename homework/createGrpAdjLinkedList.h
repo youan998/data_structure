@@ -3,141 +3,23 @@
 
 #include "grpTypeDef.h"
 
-//*************************从数据文件创建图**************************//
-//* 函数功能：从文本文件创建邻接表表示的图                          *//
-//* 入口参数  char fileName[]，文件名                               *//
-//* 出口参数：Graph &G，创建的图                                    *//
-//* 返 回 值：bool，true创建成功；false创建失败                     *//
-//* 函 数 名：CreateGrpFromFile1(char fileName[], Graph &G)        *//
-//* 备  注  ：该函数为旧版实现，直接解析邻接矩阵格式数据文件        *//
-//*******************************************************************//
-bool CreateGrpFromFile1(char fileName[], Graph &G)
+//删除字符串、字符数组左边空格
+void strLTrim(char* str)
 {
-	FILE* pFile;     //定义顺序表的文件指针
-	char str[1000];  //存放读出一行文本的字符串
-	char strTemp[10]; //判断是否注释行
-	char* ss; //字符串指针，指向fgets函数返回的字符串地址
-    int i=0,j=0;
-	int edgeNum=0;  //边的数量
-
-	GraphKind graphType;  //图类型枚举变量
-
-	pFile=fopen(fileName,"r");
-	if(!pFile)
+	int i,j;
+	int n=0;
+	n=strlen(str)+1;
+	for(i=0;i<n;i++)
 	{
-		printf("错误：文件%s打开失败。\n",fileName);
-		return false;
+		if(str[i]!=' ')  //找到左起第一个非空格位置
+			break;
 	}
-	
-	ss=fgets(str,1000,pFile);//读取第一行数据
-	strncpy(strTemp,str,2);
-	while((ss!=NULL) && (strstr(strTemp,"//")!=NULL) )  //跳过注释行
+	    //以第一个非空格字符为首字符移动字符串
+	for(j=0;j<n;j++)
 	{
-		ss=fgets(str,1000,pFile);
-		strncpy(strTemp,str,2);
-		//cout<<strTemp<<endl;
+		str[j]=str[i];
+		i++;
 	}
-	    //循环结束，str中应该已经是文件标识，判断文件格式
-	//cout<<str<<endl;
-	if(strstr(str,"Graph")==NULL)
-	{
-		printf("错误：打开的文件格式错误！\n");
-		fclose(pFile); //关闭文件
-		return false;
-	}
-    //读取图的类型
-	if(fgets(str,1000,pFile)==NULL)
-	{
-		printf("错误：读取图的类型标记失败！\n");
-		fclose(pFile); //关闭文件
-		return false;
-	}
-    //设置图的类型
-	if(strstr(str,"UDG"))
-		graphType=UDG;  //无向图
-	else if(strstr(str,"UDN"))
-		graphType=UDN;  //无向网
-	else if(strstr(str,"DG"))
-		graphType=DG;   //有向图
-	else if(strstr(str,"DN"))
-		graphType=DN;   //有向网
-	else
-	{
-		printf("错误：读取图的类型标记失败！\n");
-		fclose(pFile); //关闭文件
-		return false;
-	}
-
-	//读取顶点元素到str
-	if(fgets(str,1000,pFile)==NULL)
-	{
-		printf("错误：读取图的顶点数据失败！\n");
-		fclose(pFile); //关闭文件
-		return false;
-	}
-
-
-	//顶点数据放入图的顶点数组		
-	char* token=strtok(str," ");
-	int nNum=1;	//顶点数
-	while(token!=NULL)
-	{
-		G.VerList[nNum].data=*token;//顶点数据转换为整数，若为字符则不需转换											
-		G.VerList[nNum].firstEdge=NULL;
-		//p=NULL;
-		//eR=G.VerList[i].firstEdge;
-        token = strtok( NULL, " ");
-		nNum++;
-	}
-	
-    //图的邻接矩阵数据转换为邻接表
-	int nRow=1;		//矩阵行下标，从1开始
-	int nCol=1;		//矩阵列下标，从1开始
-	EdgeNode* eR;	//边链表尾指针
-	EdgeNode* p;    //边结点指针
-    
-	while(fgets(str,1000,pFile)!=NULL)
-	{
-		eR=NULL;
-		p=NULL;
-		nCol=1;  //列下标从1开始
-		char* token=strtok(str," ");  //以空格为分隔符，分割一行数据，写入邻接表
-		while(token!=NULL)
-		{			
-			if(atoi(token)>=1 && atoi(token)<INF)  //有边存在
-			{
-				p=new EdgeNode;  //创建一个邻接点边结点
-				p->adjVer=nCol;   //邻接点编号为列号
-				p->eInfo=atoi(token);  //取得边的附加信息
-				p->next=NULL;
-				if(G.VerList[nRow].firstEdge==NULL)
-				{
-					G.VerList[nRow].firstEdge=p;
-					eR=p;
-				}
-				else
-				{
-					eR->next=p;
-					eR=p;  //尾指针后移				
-				}				
-				edgeNum++;   //边数加1
-			}
-			token = strtok( NULL, " ");  //读取下一个子串
-			nCol++;//列号加1
-		}
-		nRow++; //行号加1，读取下一行
-	}
-
-    G.VerNum=nNum;  //图的顶点数
-	if(graphType==UDG || graphType==UDN)
-		G.ArcNum=edgeNum / 2;  //无向图或网的边数等于统计的数字除2  
-	else
-		G.ArcNum=edgeNum;
-
-	G.gKind=graphType;  //图的类型
-
-	fclose(pFile); //关闭文件
-	return true;
 }
 
 //*************************从数据文件创建图**************************//
@@ -146,7 +28,6 @@ bool CreateGrpFromFile1(char fileName[], Graph &G)
 //* 出口参数：Graph &G，创建的图                                    *//
 //* 返 回 值：bool，true创建成功；false创建失败                     *//
 //* 函 数 名：CreateGraphFromFile(char fileName[], Graph &G)       *//
-//* 备  注  ：该函数为改进版实现，支持跳过空行和注释行              *//
 //*******************************************************************//
 bool CreateGraphFromFile(char fileName[], Graph &G)
 {

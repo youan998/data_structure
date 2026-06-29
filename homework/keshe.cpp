@@ -1,11 +1,10 @@
 #include <iostream>
 #include <vector>
 #include "grpTypeDef.h"
-#include "createGrpAdjMatrix.h"
 #include "createGrpAdjLinkedList.h"
 using namespace std;
 
-// ==================== 求所有简单路径 ====================
+//  求所有简单路径 
 void setGraphpath(Graph& G, int visited[], vector<int>& path, int& pathNum,
                   int v, int end, vector<vector<int>>& allpath) {
     visited[v] = 1;
@@ -14,16 +13,13 @@ void setGraphpath(Graph& G, int visited[], vector<int>& path, int& pathNum,
     if (v == end) {
         allpath.push_back(path);
         pathNum++;
-        visited[v] = 0;
-        path.pop_back();
-        return;
-    }
-
-    EdgeNode* eR = G.VerList[v].firstEdge;
-    while (eR) {
-        if (!visited[eR->adjVer])
-            setGraphpath(G, visited, path, pathNum, eR->adjVer, end, allpath);
-        eR = eR->next;
+    } else {
+        EdgeNode* eR = G.VerList[v].firstEdge;
+        while (eR) {
+            if (!visited[eR->adjVer])
+                setGraphpath(G, visited, path, pathNum, eR->adjVer, end, allpath);
+            eR = eR->next;
+        }
     }
 
     visited[v] = 0;
@@ -49,7 +45,7 @@ void printPath(Graph& G, int start, int end) {
     }
 }
 
-// ==================== 求指定长度K的简单路径 ====================
+//  求指定长度K的简单路径
 void printPathByLength(Graph& G, int start, int end, int K, int& count) {
     int visited[MAXVEX + 1] = {0};
     vector<int> path;
@@ -73,9 +69,9 @@ void printPathByLength(Graph& G, int start, int end, int K, int& count) {
     else        cout << "共 " << count << " 条" << endl;
 }
 
-// ==================== 主函数 ====================
+// 主函数 
 int main() {
-    // 1. 系统初始化：一次性加载所有图
+    // 系统初始化：加载所有图
     Graph G[3] = {};
     char grpFile[3][20] = {"test1.txt", "test2.txt", "test3.txt"};
     
@@ -87,9 +83,8 @@ int main() {
         }
         cout << "[*] 成功创建图 " << grpFile[i] << "！" << endl;
     }
-    cout << "============================================" << endl;
 
-    // 2. 交互式主循环：允许用户反复进行测试
+    // 交互式主循环，允许用户反复进行测试
     while (true) {
         cout << "\n============= 简单路径求解系统 =============" << endl;
         cout << "  1. 求解起点到终点的【所有简单路径】" << endl;
@@ -118,7 +113,7 @@ int main() {
             continue;
         }
 
-        // 3. 分步引导用户输入参数
+        // 3分步引导用户输入参数
         int graphId;
         cout << "\n请选择要操作的图编号 (1-3): ";
         cin >> graphId;
@@ -158,7 +153,7 @@ int main() {
         cout << "--------------------------------------------" << endl;
     }
 
-    // 5. 释放资源
+    // 释放资源
     for (int i = 0; i < 3; i++) {
         DestroyGraph(G[i]);
     }

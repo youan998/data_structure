@@ -19,7 +19,6 @@ typedef enum {
 
 typedef char elementType;  //顶点元素类型
 typedef int eInfoType;     //边信息类型（权值）
-typedef int cellType;      //邻接矩阵单元格类型
 
 //邻接表边结点
 typedef struct EdgeNode {
@@ -34,10 +33,8 @@ typedef struct {
     EdgeNode* firstEdge;    //第一条边
 } VexNode;
 
-//图结构体（同时支持邻接矩阵和邻接表两种存储方式）
+//图结构体（邻接表存储）
 typedef struct {
-    elementType Data[MAXVEX + 1];          //顶点数据（邻接矩阵用）
-    cellType AdjMatrix[MAXVEX + 1][MAXVEX + 1]; //邻接矩阵
     VexNode VerList[MAXVEX + 1];           //邻接表顶点数组
     int VerNum;     //顶点数
     int ArcNum;     //边数

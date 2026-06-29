@@ -1,24 +1,33 @@
 ``` mermaid
 graph LR
-    %% 1. 上层主干路径
-    A((A)) --> B((B))
-    B --> E((E))
-    E --> G((G))
-    
-    %% 2. 下层主干路径
-    A --> C((C))
-    C --> F((F))
-    F --> G((G))
-    
-    %% 3. 核心节点 D 的汇聚与发散
-    B --> D((D))
-    C --> D
-    E --> D
-    D --> G
-    
-    %% 4. 回环连线（逆向）
-    D --> B
+    %% 1. 预先声明所有节点，锁死上下层级关系
+    A((A))
+    B((B))
+    C((C))
+    E((E))
+    D((D))
+    F((F))
+    G((G))
 
+    %% 2. 边缘连线声明
+    A --> B
+    A --> C
+    
+    B --> E
+    B --> D
+    D --> B  
+    
+    C --> D
+    C --> F
+    
+    %% 【核心修复】先声明 E->G 的长跨度线，再声明 E->D 的短线
+    E --> G
+    E --> D
+    
+    D --> G
+    F --> G
+
+    %% 3. 样式渲染
     classDef default fill:#656c8e, stroke:#fff, stroke-width:2px, color:#fff;
     classDef orange fill:#cf7539, stroke:#fff, stroke-width:2px, color:#fff;
     class G orange;
